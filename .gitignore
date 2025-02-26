@@ -1,0 +1,60 @@
+# Rider project settings (IDE-specific)
+.idea/
+*.sln.iml
+
+# User-specific Rider settings
+.idea/workspace.xml
+.idea/usage.statistics.xml
+.idea/dictionaries
+
+# Build and compiled files
+bin/
+obj/
+out/
+
+# Rider & Resharper cache
+*.suo
+*.user
+*.lock
+*.ide
+
+# VSCode settings (if applicable)
+.vscode/
+
+# NuGet dependencies
+*.nupkg
+packages/
+project.lock.json
+global.json
+.nuget/
+
+# Logs and debug output
+*.log
+logs/
+TestResults/
+
+# Rider run configurations (optional)
+.idea/runConfigurations/
+
+# Exclude Rider’s index files
+.idea/modules.xml
+.idea/misc.xml
+
+# Resharper / Rider inspections
+*.DotSettings.user
+
+# Local database files
+*.db
+*.sqlite
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Ignore all Rider IDE metadata (if not shared)
+.idea/
+
+# Ignore .NET tools & caches
+.dotnet/
+.vs/
