@@ -16,7 +16,8 @@ public class Program
         IServiceCollection collection = new ServiceCollection();
         collection
             .ConfigureSettings(root)
-            .ConfigureServices();
+            .ConfigureServices()
+            .ConfigureLogging();
         
         ServiceProvider provider = collection.BuildServiceProvider();
 
