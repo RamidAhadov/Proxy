@@ -11,10 +11,12 @@
       <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Configuration\ConfigItems\" />
+      <ProjectReference Include="..\Proxy.Messaging\Proxy.Messaging.csproj" />
     </ItemGroup>
 
 </Project>
