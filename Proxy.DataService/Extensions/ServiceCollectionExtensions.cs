@@ -1,9 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using NLog;
+using NLog.Extensions.Logging;
 
 using Proxy.DataService.Configuration.ConfigItems;
-using Proxy.DataService.DataCreators;
 using Proxy.DataService.DataCreators.Abstractions;
+using Proxy.DataService.DataCreators;
+
 using Proxy.Messaging.MessageManagers.Abstractions;
 using Proxy.Messaging.MessageManagers.Kafka;
 
@@ -29,6 +33,19 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton(creationSettings);
         services.AddSingleton(kafkaSettings);
+
+        return services;
+    }
+    
+    public static IServiceCollection ConfigureLogging(this IServiceCollection services)
+    {
+        LogManager.Setup().LoadConfigurationFromFile("C:\\Users\\rahadov\\RiderProjects\\Proxy\\Proxy.DataService\\NLog.config");
+
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.ClearProviders();
+            loggingBuilder.AddNLog();
+        });
 
         return services;
     }
