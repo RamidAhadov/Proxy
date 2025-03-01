@@ -19,7 +19,7 @@ public class DataCreator : IDataCreator
     
     public async Task CreateAsync()
     {
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < _creationSettings.MaxSendMessagesCount; i++)
         {
             foreach (var topic in _creationSettings.Topics)
             {
