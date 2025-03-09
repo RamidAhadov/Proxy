@@ -24,8 +24,10 @@ public class DataCreator : IDataCreator
     public async Task CreateAsync()
     {
         _logger.LogInformation("Starting produce messages to kafka.");
+        Console.WriteLine("Creating message producer");
         for (int i = 0; i < _creationSettings.MaxSendMessagesCount; i++)
         {
+            Console.WriteLine($"Creating message #{i + 1}");
             foreach (var topic in _creationSettings.Topics)
             {
                 await _messageProducer.ProduceMessageAsync(topic,$"Message_{i}");
