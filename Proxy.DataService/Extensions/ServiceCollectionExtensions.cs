@@ -39,7 +39,7 @@ public static class ServiceCollectionExtensions
     
     public static IServiceCollection ConfigureLogging(this IServiceCollection services)
     {
-        LogManager.Setup().LoadConfigurationFromFile("C:\\Users\\rahadov\\RiderProjects\\Proxy\\Proxy.DataService\\NLog.config");
+        LogManager.Setup().LoadConfigurationFromFile("/etc/Proxy/Configuration/NLog.config");
 
         services.AddLogging(loggingBuilder =>
         {

@@ -17,7 +17,13 @@ public class KafkaProducer : IMessageProducer
     {
         _logger = loggerFactory.CreateLogger(GetType().Name) ?? throw new ArgumentNullException(nameof(loggerFactory));
         _kafkaSettings = kafkaSettings ?? throw new ArgumentNullException(nameof(kafkaSettings));
-        ProducerConfig config = new ProducerConfig { BootstrapServers = _kafkaSettings.BootstrapServers };
+        var config = new ProducerConfig
+        {
+            BootstrapServers = _kafkaSettings.BootstrapServers,
+            SecurityProtocol = SecurityProtocol.Plaintext,
+            ApiVersionRequest = false
+        };
+        Console.WriteLine($"Creating producer for {_kafkaSettings.BootstrapServers}");
         _producer = new ProducerBuilder<Null, string>(config).Build();
     }
 
@@ -25,13 +31,14 @@ public class KafkaProducer : IMessageProducer
     {
         try
         {
-            DeliveryResult<Null, string> deliveryResult =
-                await _producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
+            Console.WriteLine($"Producing message to {topic}");
+                _ = await _producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
             _logger.LogInformation($"Produced message: {message}");
 
         }
         catch (ProduceException<Null, string> e)
         {
+            Console.WriteLine($"Error occured: {e.Error.Reason}");
             _logger.LogError(e, "An error occured while producing message");
         }
     }
