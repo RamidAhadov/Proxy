@@ -36,17 +36,13 @@ jobs:
           docker push $IMAGE_NAME:$IMAGE_TAG
 
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs: build
 
     steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.LINUX_VM_IP }}
-          username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
-          script: |
-            export NOMAD_TOKEN=${{ secrets.NOMAD_TOKEN }}
-            nomad job stop -namespace=application proxy-dataservice || true
-            nomad job run /tmp/proxy-dataservice/proxy-dataservice.nomad
+      - name: Deploy to Nomad
+        run: |
+          export NOMAD_TOKEN=${{ secrets.NOMAD_TOKEN }}
+          nomad job stop -namespace=application proxy-dataservice || true
+          nomad job run /tmp/proxy-dataservice/proxy-dataservice.nomad
+  
