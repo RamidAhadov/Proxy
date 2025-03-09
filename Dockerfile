@@ -1,6 +1,7 @@
 FROM ubuntu:22.04
 WORKDIR /app
 
+# Install packages
 RUN apt-get update && apt-get install -y \
     libicu-dev \
     libssl-dev \
