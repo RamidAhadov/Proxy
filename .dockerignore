@@ -1,0 +1,6 @@
+﻿.idea/
+
+.git/
+
+Proxy.Infrastructure/
+Proxy.DataService/Configuration/appsettings.json
