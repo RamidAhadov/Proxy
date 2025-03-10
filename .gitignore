@@ -58,3 +58,7 @@ TestResults/
 # Ignore .NET tools & caches
 .dotnet/
 .vs/
+
+
+Proxy.Infrastructure
+publish
