@@ -19,11 +19,11 @@ public class KafkaProducer : IMessageProducer
         _kafkaSettings = kafkaSettings ?? throw new ArgumentNullException(nameof(kafkaSettings));
         var config = new ProducerConfig
         {
+            //Bootstrap server is being changed in job definition
             BootstrapServers = _kafkaSettings.BootstrapServers,
             SecurityProtocol = SecurityProtocol.Plaintext,
             ApiVersionRequest = false
         };
-        Console.WriteLine($"Creating producer for {_kafkaSettings.BootstrapServers}");
         _producer = new ProducerBuilder<Null, string>(config).Build();
     }
 
@@ -31,14 +31,12 @@ public class KafkaProducer : IMessageProducer
     {
         try
         {
-            Console.WriteLine($"Producing message to {topic}");
-                _ = await _producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
+            _ = await _producer.ProduceAsync(topic, new Message<Null, string> { Value = message });
             _logger.LogInformation($"Produced message: {message}");
 
         }
         catch (ProduceException<Null, string> e)
         {
-            Console.WriteLine($"Error occured: {e.Error.Reason}");
             _logger.LogError(e, "An error occured while producing message");
         }
     }
