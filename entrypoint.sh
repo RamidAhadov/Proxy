@@ -2,7 +2,7 @@
 
 CONFIG_FILE="/config/appsettings.json"
 DEFAULT_CONFIG="/etc/Proxy/Configuration/appsettings.json"
-ENV_FILE="/local/file.txt"
+ENV_FILE="/local/BootstrapServerAddress.txt"
 
 echo "==========================="
 echo "🚀 Starting entrypoint.sh"
