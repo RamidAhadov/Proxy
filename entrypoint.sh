@@ -10,7 +10,9 @@ fi
 
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "Copying default appsettings.json to /config/..."
-    cp "$DEFAULT_CONFIG" "$CONFIG_FILE"
+    cp -v "$DEFAULT_CONFIG" "$CONFIG_FILE"
+else
+    echo "appsettings.json already exists in /config/"
 fi
 
 jq --arg ip "$BOOTSTRAP_SERVER" '.KafkaSettings.BootstrapServers = $ip' "$CONFIG_FILE" > temp.json && mv temp.json "$CONFIG_FILE"
