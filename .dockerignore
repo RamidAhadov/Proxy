@@ -3,6 +3,3 @@
 .git/
 
 Proxy.Infrastructure/
-
-# Separated
-Proxy.DataService/Configuration/appsettings.json
