@@ -9,14 +9,14 @@ echo "🚀 Starting entrypoint.sh"
 echo "==========================="
 
 # Wait for env.sh to be created by Nomad (max 10 seconds)
-for i in {1..10}; do
+for i in {1..10000}; do
     if [ -f "$ENV_FILE" ]; then
         echo "✅ Found $ENV_FILE! Sourcing environment variables..."
         source "$ENV_FILE"
         break
     else
         echo "⏳ Waiting for $ENV_FILE to be created... ($i/10)"
-        sleep 1
+        sleep 10
     fi
 done
 
