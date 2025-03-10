@@ -5,7 +5,8 @@ RUN apt-get update && apt-get install -y \
     libicu-dev \
     libssl-dev \
     librdkafka-dev \
-    jq
+    jq \
+    dos2unix
 
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
