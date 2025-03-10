@@ -8,7 +8,7 @@ echo "==========================="
 echo "🚀 Starting entrypoint.sh"
 echo "==========================="
 
-sleep 10000000
+sleep 5
 
 if [ ! -f "$ENV_FILE" ]; then
     echo "❌ ERROR: $ENV_FILE not found! Exiting..."
