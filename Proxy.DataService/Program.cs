@@ -9,17 +9,18 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        string configPath = "/etc/Proxy/Configuration/appsettings.json";
-        if (args.Length > 0)
+        string configPath = "/config/appsettings.json";
+
+        if (!File.Exists(configPath))
         {
-            configPath = args[0];
+            Console.WriteLine($"Error: Config file {configPath} not found!");
+            return;
         }
-        else if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("CONFIG_PATH")))
-        {
-            configPath = Environment.GetEnvironmentVariable("CONFIG_PATH")!;
-        }
-        
-        IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile(configPath);
+
+        IConfigurationBuilder builder = new ConfigurationBuilder()
+            .SetBasePath(Path.GetDirectoryName(configPath)!)
+            .AddJsonFile(configPath, optional: false, reloadOnChange: true);
+
         IConfigurationRoot root = builder.Build();
         
         IServiceCollection collection = new ServiceCollection();
