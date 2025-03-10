@@ -14,6 +14,6 @@ COPY Proxy.DataService/Configuration/appsettings.json /etc/Proxy/Configuration/a
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /app/Proxy.DataService
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh && dos2unix /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
