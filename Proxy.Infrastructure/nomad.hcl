@@ -38,6 +38,11 @@ client {
     path      = "/usr/app/storage/volumes/proxy-app"
     read_only = false
   }
+
+  host_volume "logs" {
+    path      = "/usr/app/storage/volumes/logs"
+    read_only = false
+  }
 }
 
 acl {
@@ -46,7 +51,7 @@ acl {
 
 consul {
   address = "127.0.0.1:8500"
-  token = ""
+  token = "c1e0dc66-18cb-eb04-8fe0-5568002a1fe0"
   server_service_name = "nomad"
   client_service_name = "nomad-client"
   auto_advertise = true
