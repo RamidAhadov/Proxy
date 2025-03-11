@@ -1,7 +1,6 @@
 ﻿#!/bin/bash
 
-CONFIG_FILE="/config/appsettings.json"
-DEFAULT_CONFIG="/etc/Proxy/Configuration/appsettings.json"
+CONFIG="/etc/Proxy/Configuration/appsettings.json"
 ENV_FILE="/local/BootstrapServerAddress.txt"
 
 echo "==========================="
@@ -22,14 +21,10 @@ if [ -z "$BOOTSTRAP_SERVER" ]; then
     exit 1
 fi
 
-if [ ! -f "$CONFIG_FILE" ]; then
-    cp -v "$DEFAULT_CONFIG" "$CONFIG_FILE"
-fi
-
-jq --arg ip "$BOOTSTRAP_SERVER" '.KafkaSettings.BootstrapServers = $ip' "$CONFIG_FILE" > temp.json && mv temp.json "$CONFIG_FILE"
+jq --arg ip "$BOOTSTRAP_SERVER" '.KafkaSettings.BootstrapServers = $ip' "$CONFIG" > temp.json && mv temp.json "$CONFIG"
 
 echo "DEBUG: Updated appsettings.json:"
-cat "$CONFIG_FILE"
+cat "$CONFIG"
 
 echo "==========================="
 echo "✅ Configuration update complete!"
