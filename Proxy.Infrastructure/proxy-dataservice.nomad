@@ -44,6 +44,11 @@ job "proxy-dataservice" {
         destination = "/config"
       }
 
+      volume_mount {
+        volume      = "proxy-logs"
+        destination = "/logs"
+      }
+
       resources {
         cpu    = 500
         memory = 1000
@@ -53,6 +58,12 @@ job "proxy-dataservice" {
     volume "proxy-config" {
       type      = "host"
       source    = "proxy"
+      read_only = false
+    }
+
+    volume "proxy-logs" {
+      type      = "host"
+      source    = "logs"
       read_only = false
     }
   }

@@ -1,6 +1,7 @@
 ﻿#!/bin/bash
 
 CONFIG="/etc/Proxy/Configuration/appsettings.json"
+LOCAL_CONFIG="/local/appsettings.json"
 ENV_FILE="/local/BootstrapServerAddress.txt"
 
 echo "==========================="
@@ -26,8 +27,11 @@ jq --arg ip "$BOOTSTRAP_SERVER" '.KafkaSettings.BootstrapServers = $ip' "$CONFIG
 echo "DEBUG: Updated appsettings.json:"
 cat "$CONFIG"
 
+# Copy the updated config to /local before starting the service
+cp -v "$CONFIG" "$LOCAL_CONFIG"
+
 echo "==========================="
-echo "✅ Configuration update complete!"
+echo "✅ Configuration copied to /local!"
 echo "🚀 Starting Proxy.DataService..."
 echo "==========================="
 

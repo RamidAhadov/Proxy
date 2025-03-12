@@ -1,7 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Proxy.DataService.Extensions;
-using Proxy.DataService.DataCreators.Abstractions;
 
 namespace Proxy.DataService;
 
@@ -22,15 +22,20 @@ public class Program
             .AddJsonFile(configPath, optional: false, reloadOnChange: true);
 
         IConfigurationRoot root = builder.Build();
-        
-        IServiceCollection collection = new ServiceCollection();
-        collection
+
+        var builderWeb = WebApplication.CreateBuilder(args);
+
+        builderWeb.Services
             .ConfigureSettings(root)
             .ConfigureServices()
-            .ConfigureLogging();
-        
-        ServiceProvider provider = collection.BuildServiceProvider();
+            .ConfigureLogging()
+            .AddControllers();
 
-        await provider.GetService<IDataCreator>()?.CreateAsync()!;
+        var app = builderWeb.Build();
+
+        app.UseRouting();
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
+
+        await app.RunAsync();
     }
 }
