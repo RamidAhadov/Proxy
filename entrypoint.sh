@@ -1,38 +1,41 @@
 ﻿#!/bin/bash
+set -e
 
 CONFIG="/etc/Proxy/Configuration/appsettings.json"
 LOCAL_CONFIG="/local/appsettings.json"
-ENV_FILE="/local/BootstrapServerAddress.txt"
+BOOTSTRAP_SERVER_FILE="/local/BootstrapServerAddress.txt"
+ASPNETCORE_ADDR_FILE="/local/ApiControllerAddress.txt"
 
-echo "==========================="
-echo "🚀 Starting entrypoint.sh"
-echo "==========================="
+for FILE in "$BOOTSTRAP_SERVER_FILE" "$ASPNETCORE_ADDR_FILE"; do
+    if [ ! -f "$FILE" ]; then
+        echo "❌ ERROR: Required file $FILE not found!"
+        exit 1
+    fi
+done
 
-sleep 5
+BOOTSTRAP_SERVER=$(<"$BOOTSTRAP_SERVER_FILE" tr -d '[:space:]')
+ASPNETCORE_ADDRESS=$(<"$ASPNETCORE_ADDR_FILE" tr -d '[:space:]')
 
-if [ ! -f "$ENV_FILE" ]; then
-    echo "❌ ERROR: $ENV_FILE not found! Exiting..."
+if [[ -z "$BOOTSTRAP_SERVER" || -z "$ASPNETCORE_ADDRESS" ]]; then
+    echo "❌ ERROR: Missing environment variables!"
     exit 1
 fi
 
-BOOTSTRAP_SERVER=$(cat "$ENV_FILE" | tr -d '[:space:]')
+# Update configuration
+jq \
+  --arg kafka "$BOOTSTRAP_SERVER" \
+  --arg aspnet "$ASPNETCORE_ADDRESS" \
+  '.KafkaSettings.BootstrapServers = $ip | .ControllerSettings.Url = $aspnet' "$CONFIG" \
+  > temp.json && mv -f temp.json "$CONFIG"
 
-if [ -z "$BOOTSTRAP_SERVER" ]; then
-    echo "❌ ERROR: BOOTSTRAP_SERVER is empty! Exiting..."
-    exit 1
-fi
+# Ensure configuration copied
+cp -fv "$CONFIG" "$LOCAL_CONFIG"
 
-jq --arg ip "$BOOTSTRAP_SERVER" '.KafkaSettings.BootstrapServers = $ip' "$CONFIG" > temp.json && mv temp.json "$CONFIG"
-
-echo "DEBUG: Updated appsettings.json:"
-cat "$CONFIG"
-
-# Copy the updated config to /local before starting the service
-cp -v "$CONFIG" "$LOCAL_CONFIG"
-
-echo "==========================="
-echo "✅ Configuration copied to /local!"
+echo "===================================="
+echo "✅ Configuration updated and applied:"
+echo "- Kafka Bootstrap Server: $BOOTSTRAP_SERVER"
+echo "- ASP.NET Core URL: $ASPNETCORE_ADDRESS"
+echo "====================================="
 echo "🚀 Starting Proxy.DataService..."
-echo "==========================="
 
 exec /app/Proxy.DataService
