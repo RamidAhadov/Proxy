@@ -19,7 +19,7 @@ ASPNETCORE_URL=$(<"$ASPNETCORE_URL_FILE" tr -d '[:space:]')
 jq \
   --arg kafka "$BOOTSTRAP_SERVER" \
   --arg aspnet "$ASPNETCORE_URL" \
-  '.KafkaSettings.BootstrapServers = $kafka | .ControllerSettings.Url = $aspnet' \
+  '.KafkaSettings.BootstrapServers = $kafka | .ControllerSettings.AspNetCoreAddress = $aspnet' \
   "$CONFIG" > "$LOCAL_CONFIG"
 
 echo "✅ Updated appsettings.json:"
