@@ -11,7 +11,7 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
-        string configPath = "/etc/Proxy/Configuration/appsettings.json";
+        string configPath = "/local/appsettings.json";
 
         if (!File.Exists(configPath))
         {
