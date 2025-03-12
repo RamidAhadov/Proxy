@@ -22,15 +22,15 @@ public class MessageController:ControllerBase
     }
     
     
-    [HttpPut]
-    public async Task<IActionResult> PutTestMessageAsync(string topic, string message)
+    [HttpPut(nameof(PutMessageAsync))]
+    public async Task<IActionResult> PutMessageAsync(string topic, string message)
     {
         try
         {
             _logger.LogInformation($"Received message: {message}");
             await _messageProducer.ProduceMessageAsync(topic, message);
             
-            return Ok();
+            return Ok("Message received");
         }
         catch (Exception e)
         {
