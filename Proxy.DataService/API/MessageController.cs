@@ -6,7 +6,7 @@ namespace Proxy.DataService.API;
 
 
 [ApiController]
-[Route("[controller]")]
+[Route("proxy/[controller]")]
 public class MessageController:ControllerBase
 {
     private readonly ILogger _logger;
