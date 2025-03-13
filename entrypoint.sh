@@ -28,4 +28,4 @@ cat "$LOCAL_CONFIG"
 echo "======================================"
 echo "🚀 Starting Proxy.DataService..."
 
-exec /app/Proxy.DataService >> /dev/stdout 2>&1
+exec /app/Proxy.DataService 2>&1 | tee /dev/stdout
