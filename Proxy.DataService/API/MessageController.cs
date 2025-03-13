@@ -36,7 +36,7 @@ public class MessageController:ControllerBase
         {
             _logger.LogError(e, $"Error while processing message: {message}");
             
-            return StatusCode(500);
+            return BadRequest();
         }
     }
 }
