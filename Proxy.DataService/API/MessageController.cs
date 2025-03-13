@@ -19,6 +19,7 @@ public class MessageController:ControllerBase
     {
         _logger = loggerFactory.CreateLogger(GetType().Name) ?? throw new ArgumentNullException(nameof(loggerFactory));
         _messageProducer = messageProducer ?? throw new ArgumentNullException(nameof(messageProducer));
+        Console.WriteLine("Contoller created");
     }
     
     
@@ -27,6 +28,7 @@ public class MessageController:ControllerBase
     {
         try
         {
+            Console.WriteLine($"Message received: {message}");
             _logger.LogInformation($"Received message: {message}");
             await _messageProducer.ProduceMessageAsync(topic, message);
             
