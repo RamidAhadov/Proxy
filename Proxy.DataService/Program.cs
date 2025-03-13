@@ -2,8 +2,10 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 using Proxy.DataService.Configuration.ConfigItems;
 using Proxy.DataService.Extensions;
+using System.Threading.Tasks;
 
 namespace Proxy.DataService;
 
@@ -37,6 +39,12 @@ public class Program
             .AddControllers();
 
         var app = builderWeb.Build();
+
+        app.Use(async (context, next) =>
+        {
+            Console.WriteLine($"[GLOBAL LOG] Incoming request: {context.Request.Method} {context.Request.Path} {context.Request.QueryString}");
+            await next.Invoke();
+        });
 
         app.UseRouting();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
