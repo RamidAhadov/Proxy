@@ -30,14 +30,7 @@ public class Program
         var builderWeb = WebApplication.CreateBuilder(args);
         ControllerSettings controllerSettings = new();
         root.GetSection("ControllerSettings").Bind(controllerSettings);
-        builderWeb.WebHost.ConfigureKestrel(options =>
-        {
-            options.ListenAnyIP(controllerSettings.Port, listenOptions =>
-            {
-                listenOptions.UseHttps(controllerSettings.CertPath, controllerSettings.CertPassword);
-            });
-        });
-
+        builderWeb.WebHost.UseUrls($"http://0.0.0.0:{controllerSettings.Port}");
 
         builderWeb.Services
             .ConfigureSettings(root)
