@@ -14,16 +14,17 @@ for file in "$BOOTSTRAP_SERVER_FILE" "$ASPNETCORE_URL_FILE" "$SSL_PASSWORD_PATH"
     fi
 done
 
-BOOTSTRAP_SERVER=$(<"$BOOTSTRAP_SERVER_FILE" tr -d '[:space:]')
-ASPNETCORE_URL=$(<"$ASPNETCORE_URL_FILE" tr -d '[:space:]')
-SSL_PASSWORD=$(<"$SSL_PASSWORD_PATH" tr -d '[:space:]')
+BOOTSTRAP_SERVER=$(tr -d '[:space:]' < "$BOOTSTRAP_SERVER_FILE")
+ASPNETCORE_URL=$(tr -d '[:space:]' < "$ASPNETCORE_URL_FILE")
+SSL_PASSWORD=$(tr -d '[:space:]' < "$SSL_PASSWORD_PATH")
 
-jq \
-  --arg kafka "$BOOTSTRAP_SERVER" \
-  --arg aspnet "$ASPNETCORE_URL" \
-  --arg sslpass "$SSL_PASSWORD"
-  '.KafkaSettings.BootstrapServers = $kafka | .ControllerSettings.AspNetCoreAddress = $aspnet | .ControllerSettings.CertPassword = $sslpass'\
-  "$CONFIG" > "$LOCAL_CONFIG"
+jq --arg kafka "$BOOTSTRAP_SERVER" \
+   --arg aspnet "$ASPNETCORE_URL" \
+   --arg sslpass "$SSL_PASSWORD" \
+   '.KafkaSettings.BootstrapServers = $kafka 
+   | .ControllerSettings.AspNetCoreAddress = $aspnet 
+   | .ControllerSettings.CertPassword = $sslpass' \
+   "$CONFIG" > "$LOCAL_CONFIG"
 
 echo "✅ Updated appsettings.json:"
 cat "$LOCAL_CONFIG"
