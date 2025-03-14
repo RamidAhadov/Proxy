@@ -2,5 +2,7 @@
 
 public class ControllerSettings
 {
-    public string AspNetCoreAddress { get; set; }
+    public int Port { get; set; }
+    public string CertPath { get; set; }
+    public string CertPassword { get; set; }
 }
