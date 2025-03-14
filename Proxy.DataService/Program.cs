@@ -23,13 +23,12 @@ public class Program
 
         if (File.Exists("/local/wildcard.pfx"))
         {
-            Console.WriteLine($"Wildcard pfx file {configPath} found!");
-            string text = File.ReadAllText("/local/wildcard.pfx");
-            byte[] bytes = Convert.FromBase64String(text);
-            foreach (var b in bytes)
-            {
-                Console.Write(b);
-            }
+            Console.WriteLine("✅ Wildcard PFX file found!");
+            Console.WriteLine($"File Size: {new FileInfo("/local/wildcard.pfx").Length} bytes");
+        }
+        else
+        {
+            Console.WriteLine("❌ ERROR: Wildcard PFX file NOT found!");
         }
 
         IConfigurationBuilder builder = new ConfigurationBuilder()
