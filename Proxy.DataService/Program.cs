@@ -21,7 +21,7 @@ public class Program
             return;
         }
 
-        if (File.Exists("local/wildcard.pfx"))
+        if (File.Exists("/local/wildcard.pfx"))
         {
             Console.WriteLine($"Wildcard pfx file {configPath} found!");
             string text = File.ReadAllText("local/wildcard.pfx");
