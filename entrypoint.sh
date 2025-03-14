@@ -23,8 +23,12 @@ jq --arg kafka "$BOOTSTRAP_SERVER" \
    --arg sslpass "$SSL_PASSWORD" \
    '.KafkaSettings.BootstrapServers = $kafka 
    | .ControllerSettings.AspNetCoreAddress = $aspnet 
-   | .ControllerSettings.CertPassword = $sslpass' \
-   "$CONFIG" > "$LOCAL_CONFIG"
+   | .ControllerSettings.CertPassword = $sslpass' "$CONFIG" > "$LOCAL_CONFIG"
+
+if [ $? -ne 0 ]; then
+    echo "❌ ERROR: Failed to update appsettings.json with jq"
+    exit 1
+fi
 
 echo "✅ Updated appsettings.json:"
 cat "$LOCAL_CONFIG"
