@@ -24,7 +24,7 @@ public class Program
         if (File.Exists("/local/wildcard.pfx"))
         {
             Console.WriteLine($"Wildcard pfx file {configPath} found!");
-            string text = File.ReadAllText("local/wildcard.pfx");
+            string text = File.ReadAllText("/local/wildcard.pfx");
             byte[] bytes = Convert.FromBase64String(text);
             foreach (var b in bytes)
             {
@@ -41,7 +41,14 @@ public class Program
         var builderWeb = WebApplication.CreateBuilder(args);
         ControllerSettings controllerSettings = new();
         root.GetSection("ControllerSettings").Bind(controllerSettings);
-        builderWeb.WebHost.UseUrls($"http://0.0.0.0:{controllerSettings.Port}");
+        
+        builderWeb.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(controllerSettings.Port, listenOptions =>
+            {
+                listenOptions.UseHttps(controllerSettings.CertPath, controllerSettings.CertPassword);
+            });
+        });
 
         builderWeb.Services
             .ConfigureSettings(root)
