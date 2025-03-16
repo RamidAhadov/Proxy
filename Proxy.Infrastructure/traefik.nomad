@@ -158,14 +158,14 @@ http:
           - url: http://{{ key "floating_ip" }}:8500
 
 log:
-  level: INFO
+  level: DEBUG
 accessLog: {}
 metrics:
   prometheus:
     addRoutersLabels: true
     addServicesLabels: true
 serversTransport:
-  insecureSkipVerify: false    
+  insecureSkipVerify: true    
                 EOH
         destination = "local/traefik.yml"
       }
