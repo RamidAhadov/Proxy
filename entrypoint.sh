@@ -6,7 +6,7 @@ LOCAL_CONFIG="/local/appsettings.json"
 BOOTSTRAP_SERVER_FILE="/local/BootstrapServerAddress.txt"
 ASPNETCORE_URL_FILE="/local/ApiControllerAddr.txt"
 
-for file in "$BOOTSTRAP_SERVER_FILE" "$ASPNETCORE_URL_FILE" "$SSL_PASSWORD_PATH"; do
+for file in "$BOOTSTRAP_SERVER_FILE" "$ASPNETCORE_URL_FILE"; do
     if [ ! -f "$file" ]; then
         echo "❌ ERROR: File $file not found!"
         exit 1
