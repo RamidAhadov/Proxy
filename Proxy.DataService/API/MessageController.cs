@@ -31,6 +31,7 @@ public class MessageController:ControllerBase
     {
         try
         {
+            Console.WriteLine($"Message: {message}");
             _logger.LogInformation($"Received message: {message}");
             _metricReporter.RegisterReceivedMessage(topic);
             await _messageProducer.ProduceMessageAsync(topic, message);
@@ -40,6 +41,7 @@ public class MessageController:ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"Error while processing message: {message}");
+            Console.WriteLine($"Error while processing message: {message}. Exception: {e.Message}");
             _metricReporter.RegisterReceivedMessageError(topic);
             
             return BadRequest();
