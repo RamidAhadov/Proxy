@@ -52,11 +52,20 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection ConfigureKestrelServer(this IServiceCollection services, IConfigurationRoot root)
     {
-        KestrelMetricsServerSettings kestrelMetricsServerSettings = new();
-        root.GetSection("KestrelMetricsServerSettings").Bind(kestrelMetricsServerSettings);
-        KestrelMetricServer server = new KestrelMetricServer(kestrelMetricsServerSettings.Url, kestrelMetricsServerSettings.Port);
-        server.Start();
+        try
+        {
+            KestrelMetricsServerSettings kestrelMetricsServerSettings = new();
+            root.GetSection("KestrelMetricsServerSettings").Bind(kestrelMetricsServerSettings);
+            KestrelMetricServer server = new KestrelMetricServer(kestrelMetricsServerSettings.Url, kestrelMetricsServerSettings.Port);
+            server.Start();
+            Console.WriteLine("Kestrel server running...");
         
-        return services;
+            return services;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
