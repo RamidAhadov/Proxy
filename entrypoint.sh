@@ -4,7 +4,7 @@ set -e
 CONFIG="/etc/Proxy/Configuration/appsettings.json"
 LOCAL_CONFIG="/local/appsettings.json"
 BOOTSTRAP_SERVER_FILE="/local/BootstrapServerAddress.txt"
-ASPNETCORE_URL_FILE="/local/ApiControllerPort.txt"
+ASPNETCORE_URL_FILE="/local/ApiControllerAddr.txt"
 SSL_PASSWORD_PATH="/local/sslpassword.txt"
 
 for file in "$BOOTSTRAP_SERVER_FILE" "$ASPNETCORE_URL_FILE" "$SSL_PASSWORD_PATH"; do
@@ -22,7 +22,7 @@ jq --arg kafka "$BOOTSTRAP_SERVER" \
    --arg aspnet "$ASPNETCORE_URL" \
    --arg sslpass "$SSL_PASSWORD" \
    '.KafkaSettings.BootstrapServers = $kafka 
-   | .ControllerSettings.Port = $aspnet 
+   | .ControllerSettings.AspNetUrl = $aspnet 
    | .ControllerSettings.CertPassword = $sslpass' "$CONFIG" > "$LOCAL_CONFIG"
 
 if [ $? -ne 0 ]; then
