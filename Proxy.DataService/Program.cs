@@ -12,11 +12,11 @@ public class Program
     public static async Task Main(string[] args)
     {
         string configPath = "/local/appsettings.json";
-
-        if (!File.Exists(configPath))
+        int retryDelay = 3000;
+        while (!File.Exists(configPath))
         {
-            Console.WriteLine($"Error: Config file {configPath} not found!");
-            return;
+            Console.WriteLine($"Error: Config file {configPath} not found! Will be retried after {retryDelay} milliseconds.");
+            await Task.Delay(retryDelay);
         }
 
         IConfigurationBuilder builder = new ConfigurationBuilder()
