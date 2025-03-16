@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http;
 using Proxy.DataService.Configuration.ConfigItems;
 using Proxy.DataService.Extensions;
-using System.Threading.Tasks;
 
 namespace Proxy.DataService;
 
@@ -31,13 +29,7 @@ public class Program
         ControllerSettings controllerSettings = new();
         root.GetSection("ControllerSettings").Bind(controllerSettings);
         
-        builderWeb.WebHost.ConfigureKestrel(options =>
-        {
-            options.ListenAnyIP(controllerSettings.Port, listenOptions =>
-            {
-                listenOptions.UseHttps(controllerSettings.CertPath, controllerSettings.CertPassword);
-            });
-        });
+        builderWeb.WebHost.UseUrls(controllerSettings.AspNetUrl);
 
         builderWeb.Services
             .ConfigureSettings(root)
@@ -46,12 +38,6 @@ public class Program
             .AddControllers();
 
         var app = builderWeb.Build();
-
-        app.Use(async (context, next) =>
-        {
-            Console.WriteLine($"[GLOBAL LOG] Incoming request: {context.Request.Method} {context.Request.Path} {context.Request.QueryString}");
-            await next.Invoke();
-        });
 
         app.UseRouting();
         app.UseEndpoints(endpoints => endpoints.MapControllers());
