@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
-
+using Prometheus;
 using Proxy.DataService.Configuration.ConfigItems;
 using Proxy.DataService.DataCreators.Abstractions;
 using Proxy.DataService.DataCreators;
@@ -47,6 +47,16 @@ public static class ServiceCollectionExtensions
             loggingBuilder.AddNLog();
         });
 
+        return services;
+    }
+
+    public static IServiceCollection ConfigureKestrelServer(this IServiceCollection services, IConfigurationRoot root)
+    {
+        KestrelMetricsServerSettings kestrelMetricsServerSettings = new();
+        root.GetSection("KestrelMetricsServerSettings").Bind(kestrelMetricsServerSettings);
+        KestrelMetricServer server = new KestrelMetricServer(kestrelMetricsServerSettings.Url, kestrelMetricsServerSettings.Port);
+        server.Start();
+        
         return services;
     }
 }
