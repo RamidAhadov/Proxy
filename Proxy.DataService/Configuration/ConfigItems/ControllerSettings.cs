@@ -1,6 +1,6 @@
 ﻿namespace Proxy.DataService.Configuration.ConfigItems;
 
-public class ControllerSettings
+public class ControllerSettings : IConfigItem
 {
     public string AspNetUrl { get; set; }
 }

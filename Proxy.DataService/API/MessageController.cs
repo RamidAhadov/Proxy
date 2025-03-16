@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Proxy.DataService.Monitoring.Abstractions;
 using Proxy.Messaging.MessageManagers.Abstractions;
 
 namespace Proxy.DataService.API;
@@ -11,14 +12,17 @@ public class MessageController:ControllerBase
 {
     private readonly ILogger _logger;
     private readonly IMessageProducer _messageProducer;
+    private readonly IServiceMetricReporter _metricReporter;
     
     
     public MessageController(
         ILoggerFactory loggerFactory,
-        IMessageProducer messageProducer)
+        IMessageProducer messageProducer, 
+        IServiceMetricReporter metricReporter)
     {
         _logger = loggerFactory.CreateLogger(GetType().Name) ?? throw new ArgumentNullException(nameof(loggerFactory));
         _messageProducer = messageProducer ?? throw new ArgumentNullException(nameof(messageProducer));
+        _metricReporter = metricReporter ?? throw new ArgumentNullException(nameof(metricReporter));
     }
     
     
@@ -28,6 +32,7 @@ public class MessageController:ControllerBase
         try
         {
             _logger.LogInformation($"Received message: {message}");
+            _metricReporter.RegisterReceivedMessage(topic);
             await _messageProducer.ProduceMessageAsync(topic, message);
             
             return Ok("Message received");
@@ -35,6 +40,7 @@ public class MessageController:ControllerBase
         catch (Exception e)
         {
             _logger.LogError(e, $"Error while processing message: {message}");
+            _metricReporter.RegisterReceivedMessageError(topic);
             
             return BadRequest();
         }
