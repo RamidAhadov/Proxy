@@ -35,7 +35,7 @@ public class Program
             .ConfigureSettings(root)
             .ConfigureServices()
             .ConfigureLogging()
-            .ConfigureKestrelServer(root)
+            //.ConfigureKestrelServer(root)
             .AddControllers();
 
         var app = builderWeb.Build();
