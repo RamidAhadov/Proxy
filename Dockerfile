@@ -12,6 +12,7 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 COPY publish/Proxy.DataService .
 COPY Proxy.DataService/Configuration/appsettings.json /etc/Proxy/Configuration/appsettings.json
+COPY Proxy.DataService/NLog.config /etc/Proxy/Configuration/NLog.config
 COPY entrypoint.sh /entrypoint.sh
 
 RUN chmod +x /app/Proxy.DataService
